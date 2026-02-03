@@ -1,89 +1,70 @@
 import os
-import sib_api_v3_sdk
-from sib_api_v3_sdk.rest import ApiException
-
-# ENV VARS (set in Render)
-BREVO_API_KEY = os.getenv("BREVO_API_KEY")
-SENDER_EMAIL = os.getenv("SENDER_EMAIL")
-SENDER_NAME = os.getenv("SENDER_NAME", "Valentine Surprise")
-BASE_URL = os.getenv("BASE_URL", "http://127.0.0.1:5000")
-
-# Brevo config
-configuration = sib_api_v3_sdk.Configuration()
-configuration.api_key["api-key"] = BREVO_API_KEY
-
-api_instance = sib_api_v3_sdk.TransactionalEmailsApi(
-    sib_api_v3_sdk.ApiClient(configuration)
-)
+import smtplib
+from email.mime.text import MIMEText
 
 
 def send_day_mail(session, day_number):
-    link = f"{BASE_URL}/unlock/{session.id}/{day_number}"
-    unsubscribe_link = f"{BASE_URL}/unsubscribe/{session.id}"
+    link = f"http://127.0.0.1:5000/unlock/{session.id}/{day_number}"
+    unsubscribe_link = f"http://127.0.0.1:5000/unsubscribe/{session.id}"
 
-    html = f"""
-    <p>Hi {session.partner_name},</p>
+    body = f"""
+Hi {session.partner_name},
 
-    <p>You have a Valentine surprise waiting 💖</p>
+You have a Valentine surprise waiting 💖
 
-    <p>
-        Answer today’s question to unlock it:<br>
-        <a href="{link}">Unlock today’s surprise 💌</a>
-    </p>
+Answer today’s question to unlock it:
+{link}
 
-    <hr>
-    <p style="font-size:12px;color:#777;">
-        Don’t want these emails anymore?
-        <a href="{unsubscribe_link}">Unsubscribe</a>
-    </p>
-    """
+---
+Don’t want these emails anymore?
+Unsubscribe here:
+{unsubscribe_link}
+"""
 
-    send_email(
-        to_email=session.partner_email,
-        subject="💌 Valentine Surprise",
-        html=html
+    msg = MIMEText(body)
+    msg["Subject"] = "💌 Valentine Surprise"
+    msg["From"] = os.getenv("EMAIL_ADDRESS")
+    msg["To"] = session.partner_email
+
+    server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
+    server.login(
+        os.getenv("EMAIL_ADDRESS"),
+        os.getenv("EMAIL_PASSWORD")
     )
+    server.send_message(msg)
+    server.quit()
 
 
 def send_finale_mail(session):
-    link = f"{BASE_URL}/finale/{session.id}"
-    unsubscribe_link = f"{BASE_URL}/unsubscribe/{session.id}"
+    link = f"http://127.0.0.1:5000/finale/{session.id}"
+    unsubscribe_link = f"http://127.0.0.1:5000/unsubscribe/{session.id}"
 
-    html = f"""
-    <h2>Hi {session.partner_name} 💖</h2>
+    body = f"""
+Hi {session.partner_name},
 
-    <p>Today is Valentine’s Day.</p>
-    <p>No questions. No locks.</p>
-    <p>Just one final message 💕</p>
+Today is Valentine’s Day 💖
 
-    <p>
-        <a href="{link}">Open your Valentine surprise 💖</a>
-    </p>
+No questions.
+No locks.
+Just one final message.
 
-    <hr>
-    <p style="font-size:12px;color:#777;">
-        <a href="{unsubscribe_link}">Unsubscribe</a>
-    </p>
-    """
+Open it here:
+{link}
 
-    send_email(
-        to_email=session.partner_email,
-        subject="💖 Happy Valentine’s Day",
-        html=html
+---
+Unsubscribe:
+{unsubscribe_link}
+"""
+
+    msg = MIMEText(body)
+    msg["Subject"] = "💖 Happy Valentine’s Day"
+    msg["From"] = os.getenv("EMAIL_ADDRESS")
+    msg["To"] = session.partner_email
+
+    server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
+    server.login(
+        os.getenv("EMAIL_ADDRESS"),
+        os.getenv("EMAIL_PASSWORD")
     )
-
-
-def send_email(to_email, subject, html):
-    try:
-        email = sib_api_v3_sdk.SendSmtpEmail(
-            to=[{"email": to_email}],
-            sender={"email": SENDER_EMAIL, "name": SENDER_NAME},
-            subject=subject,
-            html_content=html,
-        )
-
-        api_instance.send_transac_email(email)
-        print(f"✅ Email sent to {to_email}")
-
-    except ApiException as e:
-        print("❌ Brevo error:", e)
+    server.send_message(msg)
+    server.quit()
