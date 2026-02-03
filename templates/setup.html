@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valentine Setup 💖</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@400;600&display=swap');
+
+        :root {
+            --primary: #ff4d6d;
+            --secondary: #ff758f;
+            --bg-soft: #fff0f3;
+            --white: #ffffff;
+            --text: #590d22;
+            --accent: #ffccd5;
+            --success: #2ecc71;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, #fff0f3 0%, #ffccd5 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 40px 20px; /* Increased padding to prevent top clipping */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start; /* Changed from center to allow scrolling without clipping */
+            color: var(--text);
+            overflow-x: hidden;
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        /* Enhanced Floating Hearts Animation Background */
+        .heart-bg {
+            position: fixed;
+            bottom: -10vh;
+            font-size: 24px;
+            opacity: 0;
+            z-index: -1;
+            pointer-events: none;
+            animation: float-up var(--duration) infinite linear;
+            left: var(--left);
+        }
+
+        @keyframes float-up {
+            0% { 
+                transform: translateY(0) rotate(0deg) translateX(0); 
+                opacity: 0; 
+            }
+            10% { opacity: 0.5; }
+            50% { transform: translateY(-60vh) rotate(180deg) translateX(20px); }
+            90% { opacity: 0.5; }
+            100% { transform: translateY(-120vh) rotate(360deg) translateX(-20px); opacity: 0; }
+        }
+
+        .box {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            max-width: 900px;
+            width: 100%;
+            margin: 0 auto 40px; /* Centered with bottom margin */
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(255, 77, 109, 0.15);
+            border: 2px solid var(--white);
+            animation: fadeIn 0.8s ease-out;
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3rem;
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 0px rgba(255, 255, 255, 1);
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        h3::before, h3::after {
+            content: "✨";
+            font-size: 1rem;
+        }
+
+        .instructions {
+            background: linear-gradient(to right, rgba(255, 77, 109, 0.05), rgba(255, 117, 143, 0.05));
+            border-left: 5px solid var(--primary);
+            padding: 25px;
+            margin-bottom: 40px;
+            border-radius: 20px;
+            box-shadow: inset 0 0 10px rgba(255, 77, 109, 0.02);
+        }
+
+        .instructions h3 {
+            text-align: left;
+            justify-content: flex-start;
+            color: var(--primary);
+            margin-top: 0;
+        }
+
+        .instructions ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+
+        .instructions li {
+            margin-bottom: 12px;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .section-header {
+            text-align: left;
+            color: var(--secondary);
+            font-weight: 600;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            padding-left: 5px;
+        }
+
+        input:not([type="radio"]), 
+        textarea {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px 18px;
+            border: 2px solid var(--accent);
+            border-radius: 18px;
+            font-size: 1rem;
+            font-family: 'Quicksand', sans-serif;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(255, 255, 255, 0.8);
+            outline: none;
+            margin-bottom: 15px;
+            color: var(--text);
+        }
+
+        input:not([type="radio"]):focus, 
+        textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(255, 77, 109, 0.2);
+            background: var(--white);
+            transform: translateY(-2px);
+        }
+
+        .day {
+            background: var(--white);
+            border: 2px solid var(--accent);
+            padding: 30px;
+            border-radius: 25px;
+            margin-top: 40px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+        }
+
+        .day:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(255, 77, 109, 0.1);
+            border-color: var(--secondary);
+        }
+
+        .day h3 {
+            color: var(--primary);
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .options-title {
+            grid-column: 1 / -1;
+            font-weight: 600;
+            color: var(--secondary);
+            margin: 10px 0 15px 0;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .option-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 12px;
+            border-radius: 15px;
+            background: var(--bg-soft);
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+
+        .option-row:last-child {
+            grid-column: 1 / span 2;
+            justify-self: center;
+            width: 100%;
+            max-width: calc(50% - 8px);
+        }
+
+        .option-row:hover {
+            background: #ffe5ec;
+            border-color: var(--accent);
+        }
+
+        .option-row input[type="radio"] {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--accent);
+            border-radius: 50%;
+            background: var(--white);
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+        }
+
+        .option-row input[type="radio"]:checked {
+            border-color: var(--success);
+            background: #eafff2;
+            transform: scale(1.1);
+        }
+
+        .option-row input[type="radio"]:checked::after {
+            content: "✓";
+            color: var(--success);
+            font-size: 16px;
+            font-weight: bold;
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            10% { transform: scale(1); opacity: 1; }
+        }
+
+        .option-row input:not([type="radio"]) {
+            margin: 0;
+            padding: 8px 12px;
+            font-size: 0.9rem;
+            border-radius: 12px;
+        }
+
+        .finale {
+            background: linear-gradient(to bottom right, #fff0f3, #ffe5ec);
+            border: 2px dashed var(--primary);
+            border-radius: 25px;
+            padding: 35px;
+            margin-top: 50px;
+            text-align: center;
+        }
+
+        .finale h4 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.2rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+            margin-top: 0;
+        }
+
+        button {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 18px;
+            width: 100%;
+            font-size: 1.3rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 6px 20px rgba(255, 77, 109, 0.3);
+            margin-top: 40px;
+        }
+
+        button:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 12px 30px rgba(255, 77, 109, 0.4);
+            filter: brightness(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .options {
+                grid-template-columns: 1fr;
+            }
+            .option-row:last-child {
+                grid-column: auto;
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .box { padding: 25px; border-radius: 20px; }
+            h2 { font-size: 2.2rem; }
+            .day { padding: 20px; }
+            .option-row { gap: 10px; padding: 8px; }
+        }
+
+        html, body {
+            height: auto;
+            min-height: 100%;
+            margin: 0;
+        }
+
+        .site-footer {
+            background: transparent;
+            border: none;
+            padding: 18px 10px 22px;
+            text-align: center;
+            width: 100%;
+            margin-top: auto;
+        }
+
+        .footer-content {
+            max-width: 600px;
+            margin: auto;
+        }
+
+        .footer-logo {
+            height: 72px;
+            max-width: 180px;
+            object-fit: contain;
+            margin-bottom: 10px;
+            opacity: 0.95;
+            transition: transform 0.3s ease, filter 0.3s ease, opacity 0.3s ease;
+        }
+
+        .footer-logo:hover {
+            transform: scale(1.08);
+            opacity: 1;
+            filter: drop-shadow(0 0 12px rgba(255, 77, 109, 0.6)) drop-shadow(0 0 22px rgba(255, 182, 193, 0.6));
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Floating Love Symbols -->
+    <div class="heart-bg" style="--left: 10%; --duration: 12s;">💕</div>
+    <div class="heart-bg" style="--left: 25%; --duration: 15s; animation-delay: 2s;">❤️</div>
+    <div class="heart-bg" style="--left: 45%; --duration: 10s; animation-delay: 4s;">💖</div>
+    <div class="heart-bg" style="--left: 65%; --duration: 14s; animation-delay: 1s;">💗</div>
+    <div class="heart-bg" style="--left: 85%; --duration: 13s; animation-delay: 3s;">💘</div>
+    <div class="heart-bg" style="--left: 95%; --duration: 16s; animation-delay: 5s;">💓</div>
+
+    <div class="box">
+        <h2>💌 Valentine Week Setup</h2>
+
+        <div class="instructions">
+            <h3>💡 How this works</h3>
+            <ul>
+                <li>You are creating a special Valentine journey for your partner 💖</li>
+                <li>For <strong>each day (Day 1 – Day 7)</strong>, you will see one question.</li>
+                <li>Each question has <strong>5 editable options</strong>.</li>
+                <li><strong>Select ONE option as correct option</strong> — this will unlock that day’s surprise.</li>
+                <li>Your partner will receive <strong>one email per day</strong> and must answer correctly to unlock.</li>
+                <li><strong>Valentine’s Day</strong> has no questions — only your final secret message 💕</li>
+            </ul>
+        </div>
+
+        <form method="post">
+            <h3>Basic Details</h3>
+            <div class="section-header">Your Identity</div>
+            <input name="sender_name" placeholder="Your Name" required>
+            
+            <div class="section-header">Your Partner's Details</div>
+            <input name="partner_name" placeholder="Partner Name" required>
+            <input type="email" name="partner_email" placeholder="Partner Email" required>
+
+            {% for day, question in questions.items() %}
+            <div class="day">
+                <h3>Day {{ day }}</h3>
+                <p><strong>Question:</strong> {{ question }}</p>
+
+                <div class="options">
+                    <p class="options-title"><span>📝</span> Options (edit the options you want to change & select the correct one)</p>
+
+                    {% for i in range(1,6) %}
+                    <div class="option-row">
+                        <input
+                            type="radio"
+                            name="day{{ day }}_correct"
+                            value="{{ i }}"
+                            required
+                        >
+
+                        <input
+                            type="text"
+                            name="day{{ day }}_option{{ i }}"
+                            value="{% if day == 1 %}{% if i == 1 %}Rose{% elif i == 2 %}Lily{% elif i == 3 %}Tulip{% elif i == 4 %}Sunflower{% else %}Orchid{% endif %}{% elif day == 2 %}{% if i == 1 %}Kochi{% elif i == 2 %}Bangalore{% elif i == 3 %}Chennai{% elif i == 4 %}Trivandrum{% else %}Online{% endif %}{% elif day == 3 %}{% if i == 1 %}Dairy Milk{% elif i == 2 %}KitKat{% elif i == 3 %}Ferrero Rocher{% elif i == 4 %}5 Star{% else %}Munch{% endif %}{% elif day == 4 %}{% if i == 1 %}Baby{% elif i == 2 %}Love{% elif i == 3 %}Darling{% elif i == 4 %}Cutie{% else %}Dear{% endif %}{% elif day == 5 %}{% if i == 1 %}Okay{% elif i == 2 %}Hmm{% elif i == 3 %}Seriously{% elif i == 4 %}Actually{% else %}Fine{% endif %}{% elif day == 6 %}{% if i == 1 %}Home{% elif i == 2 %}Beach{% elif i == 3 %}Hills{% elif i == 4 %}Cafe{% else %}Temple{% endif %}{% elif day == 7 %}{% if i == 1 %}Love{% elif i == 2 %}Forever{% elif i == 3 %}Together{% elif i == 4 %}Us{% else %}Soulmates{% endif %}{% endif %}"
+                            required
+                        >
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+
+            <!-- VALENTINE DAY -->
+            <div class="finale">
+                <h4>💖 Valentine’s Day (Final Secret Message)</h4>
+                <textarea
+                    name="valentine_secret"
+                    rows="5"
+                    placeholder="Write your final secret message for Valentine’s Day 💕"
+                    required
+                ></textarea>
+            </div>
+
+            <button type="submit">Save Valentine Surprise 💘</button>
+        </form>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-content">
+            <img src="/static/logo.png" alt="Nexston Logo" class="footer-logo">
+            <p>
+                An interactive project by<br>
+                <strong>Nexston Corporations Pvt Ltd</strong>
+            </p>
+        </div>
+    </footer>
+</body>
+</html>

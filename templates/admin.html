@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Panel 💻</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #f7f7f7;
+            padding: 20px;
+        }
+        .session {
+            background: white;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+        }
+        h2 {
+            margin-top: 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background: #ffe6ea;
+        }
+        .secret {
+            background: #fff0f3;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+        .unlocked {
+            color: green;
+            font-weight: bold;
+        }
+        .locked {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+<div style="margin-bottom:20px;">
+
+  {% if mails_enabled %}
+    <span style="
+      padding:8px 14px;
+      background:#2ecc71;
+      color:white;
+      border-radius:20px;
+      font-weight:bold;
+    ">
+      📧 Mail Sending: ON
+    </span>
+  {% else %}
+    <span style="
+      padding:8px 14px;
+      background:#e74c3c;
+      color:white;
+      border-radius:20px;
+      font-weight:bold;
+    ">
+      🚫 Mail Sending: OFF
+    </span>
+  {% endif %}
+
+  <a href="/admin/toggle-mails"
+     style="
+       margin-left:20px;
+       padding:8px 14px;
+       background:#333;
+       color:white;
+       border-radius:6px;
+       text-decoration:none;
+     ">
+    Toggle Mail
+  </a>
+
+</div>
+
+<h1>💖 Admin Panel</h1>
+
+
+
+{% for item in data %}
+<div class="session">
+
+    <h2>Session ID: {{ item.session.id }}</h2>
+
+    <p><strong>Sender:</strong> {{ item.session.sender_name }}</p>
+    <p><strong>Sender Email:</strong> {{ item.session.sender_email }}</p>
+    <p><strong>Partner:</strong> {{ item.session.partner_name }}</p>
+    <p><strong>Email:</strong> {{ item.session.partner_email }}</p>
+
+<p>
+  <strong>User Mail Status:</strong>
+  {% if item.session.mails_enabled %}
+    <span style="color:green;font-weight:bold;">ON</span>
+  {% else %}
+    <span style="color:red;font-weight:bold;">PAUSED</span>
+  {% endif %}
+</p>
+
+<a href="/admin/toggle-user-mails/{{ item.session.id }}"
+   style="
+     display:inline-block;
+     margin-bottom:10px;
+     padding:6px 12px;
+     background:#555;
+     color:white;
+     border-radius:5px;
+     text-decoration:none;
+   ">
+   Toggle This User’s Mail
+</a>
+
+    <h3>Day 1–7 Status</h3>
+
+    <table>
+        <tr>
+            <th>Day</th>
+            <th>Question</th>
+            <th>Status</th>
+        </tr>
+        {% for day in item.days %}
+        <tr>
+            <td>{{ day.day_number }}</td>
+            <td>{{ day.question }}</td>
+            <td>
+                {% if day.is_unlocked %}
+                    <span class="unlocked">Unlocked</span>
+                {% else %}
+                    <span class="locked">Locked</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h3>💌 Valentine Day Secret</h3>
+    <div class="secret">
+        {{ item.secret or "❌ No secret saved" }}
+    </div>
+
+</div>
+{% endfor %}
+
+</body>
+</html>

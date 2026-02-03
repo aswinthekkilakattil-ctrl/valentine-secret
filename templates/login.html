@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome 💖</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@400;600&display=swap');
+
+        :root {
+            --primary: #ff4d6d;
+            --secondary: #ff758f;
+            --bg-soft: #fff0f3;
+            --white: #ffffff;
+            --text: #590d22;
+            --accent: #ffccd5;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, #fff0f3 0%, #ffccd5 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start; /* Prevents top-clipping */
+            color: var(--text);
+            overflow-x: hidden;
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        /* Enhanced Floating Hearts Animation Background */
+        .heart-bg {
+            position: fixed;
+            bottom: -10vh;
+            font-size: 24px;
+            opacity: 0;
+            z-index: -1;
+            pointer-events: none;
+            animation: float-up var(--duration) infinite linear;
+            left: var(--left);
+        }
+
+        @keyframes float-up {
+            0% { 
+                transform: translateY(0) rotate(0deg) translateX(0); 
+                opacity: 0; 
+            }
+            10% { 
+                opacity: 0.5; 
+            }
+            50% {
+                transform: translateY(-60vh) rotate(180deg) translateX(20px);
+            }
+            90% { 
+                opacity: 0.5; 
+            }
+            100% { 
+                transform: translateY(-120vh) rotate(360deg) translateX(-20px); 
+                opacity: 0; 
+            }
+        }
+
+        body::before, body::after {
+            position: fixed;
+            font-size: 32px;
+            opacity: 0.3;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        body::before {
+            content: "❤️";
+            top: -10%;
+            left: 5%;
+            animation: float-cycle 18s infinite linear;
+        }
+
+        body::after {
+            content: "💖";
+            top: -10%;
+            right: 8%;
+            animation: float-cycle 14s infinite linear 2s;
+        }
+
+        @keyframes float-cycle {
+            0% { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.4; }
+            90% { opacity: 0.4; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            max-width: 900px; /* Landscape width */
+            width: 100%;
+            margin: 0 auto 40px;
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(255, 77, 109, 0.15);
+            border: 2px solid var(--white);
+            animation: fadeIn 0.8s ease-out;
+            position: relative;
+            z-index: 1;
+        }
+
+        .layout-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr; /* Landscape split */
+            gap: 40px;
+            align-items: start;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3rem;
+            color: var(--primary);
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 0px rgba(255, 255, 255, 1);
+            grid-column: 1 / -1;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--secondary);
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 30px;
+            line-height: 1.4;
+            grid-column: 1 / -1;
+        }
+
+        .story {
+            background: linear-gradient(to right, rgba(255, 77, 109, 0.05), rgba(255, 117, 143, 0.05));
+            border-left: 4px solid var(--primary);
+            padding: 25px;
+            font-size: 1rem;
+            color: var(--text);
+            border-radius: 15px;
+            line-height: 1.7;
+            box-shadow: inset 0 0 10px rgba(255, 77, 109, 0.02);
+            height: 100%;
+            box-sizing: border-box;
+        }
+
+        .story strong {
+            color: var(--primary);
+        }
+
+        .form-section {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: block;
+            font-size: 0.9rem;
+            color: var(--secondary);
+            padding-left: 5px;
+        }
+
+        input {
+            width: 100%;
+            box-sizing: border-box;
+            margin-top: 5px;
+            margin-bottom: 20px;
+            padding: 12px 18px;
+            border: 2px solid var(--accent);
+            border-radius: 15px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.8);
+            outline: none;
+        }
+
+        input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 12px rgba(255, 77, 109, 0.15);
+            background: var(--white);
+            transform: translateY(-2px);
+        }
+
+        button {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 16px;
+            width: 100%;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 6px 20px rgba(255, 77, 109, 0.3);
+            margin-top: 10px;
+        }
+
+        button:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 10px 25px rgba(255, 77, 109, 0.4);
+            filter: brightness(1.1);
+        }
+
+        .footer-links {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 0.95rem;
+            color: var(--secondary);
+        }
+
+        .footer-links a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 700;
+            transition: color 0.3s ease;
+            display: inline-block;
+            margin-top: 5px;
+        }
+
+        .footer-links a:hover {
+            color: var(--secondary);
+            text-decoration: underline;
+            transform: scale(1.05);
+        }
+
+        /* Responsive View */
+        @media (max-width: 850px) {
+            .layout-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .container {
+                max-width: 440px;
+                padding: 30px 20px;
+            }
+            h1 {
+                font-size: 2.5rem;
+            }
+        }
+
+        html, body {
+            height: auto;
+            min-height: 100%;
+            margin: 0;
+        }
+
+        .site-footer {
+            background: transparent;
+            border: none;
+            padding: 18px 10px 22px;
+            text-align: center;
+            width: 100%;
+            margin-top: auto;
+        }
+
+        .footer-content {
+            max-width: 600px;
+            margin: auto;
+        }
+
+        .footer-logo {
+            height: 72px;
+            max-width: 180px;
+            object-fit: contain;
+            margin-bottom: 10px;
+            opacity: 0.95;
+            transition: transform 0.3s ease, filter 0.3s ease, opacity 0.3s ease;
+        }
+
+        .footer-logo:hover {
+            transform: scale(1.08);
+            opacity: 1;
+            filter: drop-shadow(0 0 12px rgba(255, 77, 109, 0.6)) drop-shadow(0 0 22px rgba(255, 182, 193, 0.6));
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="heart-bg" style="--left: 15%; --duration: 12s; font-size: 20px;">💕</div>
+    <div class="heart-bg" style="--left: 35%; --duration: 15s; font-size: 28px;">💗</div>
+    <div class="heart-bg" style="--left: 55%; --duration: 10s; font-size: 22px;">❤️</div>
+    <div class="heart-bg" style="--left: 75%; --duration: 13s; font-size: 32px;">💖</div>
+    <div class="heart-bg" style="--left: 90%; --duration: 16s; font-size: 18px;">💘</div>
+    <div class="heart-bg" style="--left: 25%; --duration: 11s; font-size: 25px; animation-delay: 2s;">💓</div>
+    <div class="heart-bg" style="--left: 65%; --duration: 14s; font-size: 21px; animation-delay: 4s;">💝</div>
+
+    <div class="container">
+        <div class="layout-grid">
+            <h1>💌 Welcome</h1>
+
+            <div class="subtitle">
+                A love story that unfolds one day at a time
+            </div>
+
+            <div class="story">
+                Every day, your partner receives a gentle question.<br><br>
+                When they choose the right answer, a romantic surprise story opens -
+                <strong>a story neither of you has seen before.</strong><br><br>
+                On Valentine’s Day, your final secret message is revealed ❤️
+            </div>
+
+            <div class="form-section">
+                <form method="post">
+                    <label>Email</label>
+                    <input type="email" name="email" required placeholder="Enter your email">
+
+                    <label>Password</label>
+                    <input type="password" name="password" required placeholder="Enter your password">
+
+                    <button type="submit">Continue 💖</button>
+                </form>
+
+                <div class="footer-links">
+                    Don’t have an account? 
+                    <br>
+                    <a href="/register">Create one ✨</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-content">
+            <img src="/static/logo.png" alt="Nexston Logo" class="footer-logo">
+            <p>
+                An interactive project by<br>
+                <strong>Nexston Corporations Pvt Ltd</strong>
+            </p>
+        </div>
+    </footer>
+
+</body>
+</html>

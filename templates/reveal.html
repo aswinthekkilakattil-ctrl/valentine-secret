@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Surprise 💘</title>
+  <style>
+    :root {
+      --primary-pink: #ff85a1;
+      --soft-pink: #fbb1bd;
+      --bg-gradient: linear-gradient(135deg, #fff0f3 0%, #ffc2d1 100%);
+      --text-color: #4a4a4a;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg-gradient);
+      min-height: 100vh;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      overflow-x: hidden;
+      color: var(--text-color);
+    }
+
+    /* Floating Hearts Background Animation */
+    body::before {
+      content: "❤";
+      position: fixed;
+      top: -10%;
+      left: 10%;
+      font-size: 24px;
+      color: rgba(255, 133, 161, 0.3);
+      animation: heartFloat 15s linear infinite;
+      z-index: -1;
+    }
+
+    body::after {
+      content: "❤";
+      position: fixed;
+      top: -10%;
+      right: 20%;
+      font-size: 18px;
+      color: rgba(255, 133, 161, 0.2);
+      animation: heartFloat 12s linear infinite 2s;
+      z-index: -1;
+    }
+
+    @keyframes heartFloat {
+      0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+    }
+
+    .box {
+      background: rgba(255, 255, 255, 0.95);
+      width: 100%;
+      max-width: 550px;
+      padding: 40px;
+      border-radius: 24px;
+      box-shadow: 0 15px 35px rgba(255, 133, 161, 0.2);
+      text-align: center;
+      position: relative;
+      animation: boxFadeIn 0.8s ease-out;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+    }
+
+    @keyframes boxFadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+      color: var(--primary-pink);
+      font-size: 2rem;
+      margin-top: 0;
+      margin-bottom: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    h2::before, h2::after {
+      content: "✨";
+      font-size: 1.2rem;
+    }
+
+    .story {
+      font-family: 'Georgia', serif;
+      font-style: italic;
+      font-size: 1.2rem;
+      line-height: 1.8;
+      color: #5d5d5d;
+      margin-bottom: 10px;
+      padding: 20px;
+      position: relative;
+      background: #fffafa;
+      border-radius: 15px;
+      border-left: 4px solid var(--soft-pink);
+    }
+
+    .story::before {
+      content: "“";
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-size: 40px;
+      color: var(--soft-pink);
+      opacity: 0.5;
+      font-family: serif;
+    }
+
+    /* Additional decorative elements */
+    .hearts-divider {
+      margin: 20px 0;
+      color: var(--soft-pink);
+      letter-spacing: 5px;
+      font-size: 1.2rem;
+    }
+
+    .box:hover {
+      transform: translateY(-5px);
+      transition: transform 0.3s ease;
+    }
+
+    /* Mobile responsiveness */
+    @media (max-width: 480px) {
+      .box {
+        padding: 25px;
+      }
+      h2 {
+        font-size: 1.6rem;
+      }
+      .story {
+        font-size: 1.1rem;
+      }
+    }
+    html, body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Push footer to bottom */
+.page-wrapper {
+  flex: 1;
+}
+
+/* ---------- Footer ---------- */
+.site-footer {
+  background: transparent;          /* ✅ transparent */
+  border: none;                     /* ✅ no border */
+  padding: 18px 10px 22px;
+  text-align: center;
+}
+
+/* Footer content */
+.footer-content {
+  max-width: 600px;
+  margin: auto;
+}
+
+/* Logo */
+.footer-logo {
+  height: 72px;          /* ← perfect for desktop & mobile */
+  max-width: 180px;     /* prevents over-stretching */
+  object-fit: contain;
+
+  margin-bottom: 10px;
+  opacity: 0.95;
+
+  transition:
+    transform 0.3s ease,
+    filter 0.3s ease,
+    opacity 0.3s ease;
+}
+/* ✨ Glow on hover */
+.footer-logo:hover {
+  transform: scale(1.08);
+  opacity: 1;
+  filter: drop-shadow(0 0 12px rgba(255, 77, 109, 0.6))
+          drop-shadow(0 0 22px rgba(255, 182, 193, 0.6));
+}
+  </style>
+</head>
+
+<body>
+  <div class="box">
+    <h2>💖 Your Surprise</h2>
+
+    <div class="hearts-divider">•••••</div>
+
+    <div class="story">
+      {{ story }}
+    </div>
+
+    <div class="hearts-divider">•••••</div>
+  </div>
+
+  <!-- Extra CSS floating elements -->
+  <div style="position:fixed; bottom:10%; left:5%; animation: heartFloat 18s linear infinite 1s; opacity:0.2; pointer-events:none;">❤</div>
+  <div style="position:fixed; bottom:15%; right:10%; animation: heartFloat 20s linear infinite 4s; opacity:0.1; pointer-events:none;">❤</div>
+ <!-- ✅ Footer stays at bottom -->
+  <footer class="site-footer">
+    <div class="footer-content">
+      <img src="/static/logo.png" alt="Nexston Logo" class="footer-logo">
+      <p>
+        An interactive project by<br>
+        <strong>Nexston Corporations Pvt Ltd</strong>
+      </p>
+    </div>
+  </footer>
+</body>
+</html>
