@@ -5,3 +5,4 @@ flask-dance
 python-dotenv
 gunicorn
 sib-api-v3-sdk
+requests

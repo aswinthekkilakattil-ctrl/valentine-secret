@@ -1,85 +1,93 @@
 import os
-import smtplib
-import socket
-from email.mime.text import MIMEText
+import requests
 
-SMTP_HOST = "smtp.gmail.com"
-SMTP_PORT = 465
-SMTP_TIMEOUT = 10  # seconds
+BREVO_API_KEY = os.getenv("BREVO_API_KEY")
+SENDER_EMAIL = os.getenv("BREVO_SENDER_EMAIL")
+SENDER_NAME = os.getenv("BREVO_SENDER_NAME", "Valentine 💖")
+BASE_URL = os.getenv("BASE_URL", "http://localhost:5000")
+
+BREVO_URL = "https://api.brevo.com/v3/smtp/email"
 
 
-def _send_email(to_email, subject, body):
-    msg = MIMEText(body)
-    msg["Subject"] = subject
-    msg["From"] = os.getenv("EMAIL_ADDRESS")
-    msg["To"] = to_email
+def _send_email(to_email, subject, html_content):
+    headers = {
+        "api-key": BREVO_API_KEY,
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+    }
 
-    try:
-        server = smtplib.SMTP_SSL(
-            SMTP_HOST,
-            SMTP_PORT,
-            timeout=SMTP_TIMEOUT
-        )
-        server.login(
-            os.getenv("EMAIL_ADDRESS"),
-            os.getenv("EMAIL_PASSWORD")
-        )
-        server.send_message(msg)
-        server.quit()
-        print(f"✅ Mail sent to {to_email}")
-    except (smtplib.SMTPException, socket.timeout) as e:
-        print("❌ SMTP error:", e)
+    payload = {
+        "sender": {
+            "email": SENDER_EMAIL,
+            "name": SENDER_NAME
+        },
+        "to": [
+            {"email": to_email}
+        ],
+        "subject": subject,
+        "htmlContent": html_content
+    }
+
+    response = requests.post(BREVO_URL, json=payload, headers=headers)
+
+    if response.status_code not in (200, 201, 202):
+        print("❌ Brevo error:", response.status_code, response.text)
         return False
 
+    print(f"✅ Email sent to {to_email}")
     return True
 
 
 def send_day_mail(session, day_number):
-    base_url = os.getenv("BASE_URL", "http://localhost:5000")
+    link = f"{BASE_URL}/unlock/{session.id}/{day_number}"
+    unsubscribe = f"{BASE_URL}/unsubscribe/{session.id}"
 
-    body = f"""
-Hi {session.partner_name},
+    html = f"""
+    <p>Hi <b>{session.partner_name}</b>, 💖</p>
 
-You have a Valentine surprise waiting 💖
+    <p>You have a Valentine surprise waiting for you.</p>
 
-Answer today’s question to unlock it:
-{base_url}/unlock/{session.id}/{day_number}
+    <p>
+        👉 <a href="{link}">Answer today’s question to unlock it</a>
+    </p>
 
----
-Don’t want these emails anymore?
-Unsubscribe here:
-{base_url}/unsubscribe/{session.id}
-"""
+    <hr>
+    <small>
+        Don’t want these emails?
+        <a href="{unsubscribe}">Unsubscribe</a>
+    </small>
+    """
 
     return _send_email(
         session.partner_email,
         "💌 Valentine Surprise",
-        body
+        html
     )
 
 
 def send_finale_mail(session):
-    base_url = os.getenv("BASE_URL", "http://localhost:5000")
+    link = f"{BASE_URL}/finale/{session.id}"
+    unsubscribe = f"{BASE_URL}/unsubscribe/{session.id}"
 
-    body = f"""
-Hi {session.partner_name},
+    html = f"""
+    <p>Hi <b>{session.partner_name}</b>, 💖</p>
 
-Today is Valentine’s Day 💖
+    <p><b>Today is Valentine’s Day.</b></p>
 
-No questions.
-No locks.
-Just one final message.
+    <p>No questions. No locks.</p>
 
-Open it here:
-{base_url}/finale/{session.id}
+    <p>
+        👉 <a href="{link}">Open your final secret message</a>
+    </p>
 
----
-Unsubscribe:
-{base_url}/unsubscribe/{session.id}
-"""
+    <hr>
+    <small>
+        <a href="{unsubscribe}">Unsubscribe</a>
+    </small>
+    """
 
     return _send_email(
         session.partner_email,
         "💖 Happy Valentine’s Day",
-        body
+        html
     )
