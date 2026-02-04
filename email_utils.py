@@ -2,92 +2,77 @@ import os
 import requests
 
 BREVO_API_KEY = os.getenv("BREVO_API_KEY")
-SENDER_EMAIL = os.getenv("BREVO_SENDER_EMAIL")
-SENDER_NAME = os.getenv("BREVO_SENDER_NAME", "Valentine 💖")
-BASE_URL = os.getenv("BASE_URL", "http://localhost:5000")
+BREVO_SENDER_EMAIL = os.getenv("BREVO_SENDER_EMAIL")
+BREVO_SENDER_NAME = os.getenv("BREVO_SENDER_NAME")
+BASE_URL = os.getenv("BASE_URL")
 
 BREVO_URL = "https://api.brevo.com/v3/smtp/email"
 
 
-def _send_email(to_email, subject, html_content):
-    headers = {
-        "api-key": BREVO_API_KEY,
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-    }
+def send_day_mail(session, day_number):
+    link = f"{BASE_URL}/unlock/{session.id}/{day_number}"
+    unsubscribe_link = f"{BASE_URL}/unsubscribe/{session.id}"
 
     payload = {
         "sender": {
-            "email": SENDER_EMAIL,
-            "name": SENDER_NAME
+            "email": BREVO_SENDER_EMAIL,
+            "name": BREVO_SENDER_NAME
         },
         "to": [
-            {"email": to_email}
+            {"email": session.partner_email, "name": session.partner_name}
         ],
-        "subject": subject,
-        "htmlContent": html_content
+        "subject": "💌 Valentine Surprise",
+        "htmlContent": f"""
+        <p>Hi {session.partner_name},</p>
+        <p>You have a Valentine surprise waiting 💖</p>
+        <p><a href="{link}">Unlock today’s surprise</a></p>
+        <hr>
+        <p><a href="{unsubscribe_link}">Unsubscribe</a></p>
+        """
     }
 
-    response = requests.post(BREVO_URL, json=payload, headers=headers)
+    headers = {
+        "accept": "application/json",
+        "content-type": "application/json",
+        "api-key": BREVO_API_KEY
+    }
 
-    if response.status_code not in (200, 201, 202):
-        print("❌ Brevo error:", response.status_code, response.text)
-        return False
+    r = requests.post(BREVO_URL, json=payload, headers=headers)
 
-    print(f"✅ Email sent to {to_email}")
-    return True
-
-
-def send_day_mail(session, day_number):
-    link = f"{BASE_URL}/unlock/{session.id}/{day_number}"
-    unsubscribe = f"{BASE_URL}/unsubscribe/{session.id}"
-
-    html = f"""
-    <p>Hi <b>{session.partner_name}</b>, 💖</p>
-
-    <p>You have a Valentine surprise waiting for you.</p>
-
-    <p>
-        👉 <a href="{link}">Answer today’s question to unlock it</a>
-    </p>
-
-    <hr>
-    <small>
-        Don’t want these emails?
-        <a href="{unsubscribe}">Unsubscribe</a>
-    </small>
-    """
-
-    return _send_email(
-        session.partner_email,
-        "💌 Valentine Surprise",
-        html
-    )
+    if r.status_code >= 400:
+        print("❌ Brevo error:", r.status_code, r.text)
+    else:
+        print("✅ Brevo mail sent:", session.partner_email)
 
 
 def send_finale_mail(session):
     link = f"{BASE_URL}/finale/{session.id}"
-    unsubscribe = f"{BASE_URL}/unsubscribe/{session.id}"
 
-    html = f"""
-    <p>Hi <b>{session.partner_name}</b>, 💖</p>
+    payload = {
+        "sender": {
+            "email": BREVO_SENDER_EMAIL,
+            "name": BREVO_SENDER_NAME
+        },
+        "to": [
+            {"email": session.partner_email, "name": session.partner_name}
+        ],
+        "subject": "💖 Happy Valentine’s Day",
+        "htmlContent": f"""
+        <p>Hi {session.partner_name},</p>
+        <p>Today is Valentine’s Day 💖</p>
+        <p><a href="{link}">Open your final secret</a></p>
+        """
+    }
 
-    <p><b>Today is Valentine’s Day.</b></p>
+    headers = {
+        "accept": "application/json",
+        "content-type": "application/json",
+        "api-key": BREVO_API_KEY
+    }
 
-    <p>No questions. No locks.</p>
+    r = requests.post(BREVO_URL, json=payload, headers=headers)
 
-    <p>
-        👉 <a href="{link}">Open your final secret message</a>
-    </p>
-
-    <hr>
-    <small>
-        <a href="{unsubscribe}">Unsubscribe</a>
-    </small>
-    """
-
-    return _send_email(
-        session.partner_email,
-        "💖 Happy Valentine’s Day",
-        html
-    )
+    if r.status_code >= 400:
+        print("❌ Brevo error:", r.status_code, r.text)
+    else:
+        print("✅ Finale mail sent")
